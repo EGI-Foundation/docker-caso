@@ -1,0 +1,19 @@
+sudo: required
+services:
+- docker
+jobs:
+  include:
+  - stage: build docker images
+    script:
+    - export TAG=$(if [ "x$TRAVIS_TAG" != "x" ]; then echo "$TRAVIS_TAG"; else echo
+      "latest"; fi)
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - docker build -t caso .
+    - docker tag caso $DOCKER_REPO/caso:$TAG
+    after_success:
+    - docker push $DOCKER_REPO/caso
+env:
+  global:
+  - DOCKER_REPO=egifedcloud
+  - secure: dUU5QRRyZZOxdacUCu2LjpZCUgDTEqj64tT+vzH/gwDs2cO4U8BNS/BXL4XH5Jgs+9JLYMctKqgFS4/gbHvB+ps71rkh4XBFqVPGUe4foFOoXEL1gnYzoFSccZHEm6RE2UEHompFgcWXDtS3IEUhF1B/XM8+SBhcZfS4WL7CiZ9ntFLEo9BW/maDBlYCacuqABMQ9F+rZEfsQKzwexSh4aM1caNJ3TQ9Ul8qVOwiyQ+E3ZDZqxBb31oxoVivFk4KCYeCCg7qjlc3gchFiB9V2RyKmp7wuzwMV3IxLky8TLeOySOUaAfqQMi6VqJgYYG8oEPsipN9CEw1vbzfT4BmV7mGfz5WRs2fs9mhuZTZtfldYg6WCJxaZC/Od/J+13+iF7vNqv2Hph3GIM+MKB0wFrXM+5Ig4kxZ+i3WG1TexyMi6hk81oVtqBLPQ6/G84SDUsWyoKDfaH5o5k6bi6ydKi5yb0JbZ8pYmvrjxRgXH4BuAF/bUYMPcPCHkMnTs6vzj0vcxyRK0qZeBl3FqF4jci3qHYhvrtDA4S71gKRdlvwQbsV5WLgpFSGJUh4ngvKV+12x6lzKKdzZiUafjfM5nealF4XjGLaZvT0hgWo+5n3VX3b6e3WQng4jsxZxx8yYmaFZLrb5CABhOYluD06BFuXAjBtDVB5D7WJV6oHiA+Q=
+  - secure: IzcBUlscCGXWGoFjdrVfw7oUvZjx32wY3JtTNie6eLiBD2jjFvGZYIMpp8AnFdU++YLnBQp7KWSeYFn4tsR02SSnqSw91JfSYKxBie7CJNEJRL91qBeDkBxOvfKUAopjQebv1Q8P57wxtp9YFKzBmVyRBWuVB9abxYLvgGKERN1ULPvH5Fau67uJz0tF53XeunciY2XpwNYY/sNVebvwnd74cP3BXEvtYKYzEi56Qa4/LKVhVqGYYtPU5xttIuuXDoYiA1T8kMNdLDMCltPddbQwLLBgejun85nYMmV09LBwnaQMhdTAQFDXjepfxm5bW/OSua3LmYsN/bGMV5PPL4p6k3DzqTu0X6EmbXglO7ubBy/OFakmoAg+oK5dK1Iba5h4i9keJ8VZOyPUIsHhUvaiUJTK/c3vTlIQpsbppbQy12EM7EboYvM+aDrzXqYjVyBZyEdbw2CcYe0vq4zUQosna+luRpiWEinzqy9arZGhEHCChKtI5a8wMa3PyWHaMYgeryYU5jzMAYftfYZheEAeEj6INeXhs+webicm/bPUMHkzXLv3YVzYmF2TbCFKHlpbDMVY4/eChneO4+h1gj8byyA2fhQxl4liTDarEIEcKmd+h/Tg5Dgo6Li0eEPzOgXaS0eDpTz4QDpEUur69nZ9OcNVcdiAKh9b8S2sdzo=
